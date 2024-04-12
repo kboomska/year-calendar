@@ -35,6 +35,10 @@ class MonthCalendar extends StatelessWidget {
     return SfCalendar(
       controller: controller,
       view: CalendarView.month,
+      // Формат более не нужен, просто отображаем кастомный заголовок.
+      // headerDateFormat: 'MMMM',
+      headerHeight: 0,
+      viewHeaderHeight: 0,
       allowViewNavigation: false,
       firstDayOfWeek: 1,
       initialDisplayDate: DateTime(currentDate.year, month, currentDate.day),
