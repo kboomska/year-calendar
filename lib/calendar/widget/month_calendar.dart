@@ -3,37 +3,50 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class MonthCalendar extends StatelessWidget {
-  const MonthCalendar({super.key, required this.index});
+  const MonthCalendar({
+    super.key,
+    required this.month,
+    required this.currentDate,
+    required this.controller,
+    required this.onTap,
+  });
 
-  final int index;
+  /// Порядковый номер месяца.
+  final int month;
+
+  /// Текущая дата.
+  final DateTime currentDate;
+
+  /// Контроллер для конкретного месяца.
+  final CalendarController controller;
+
+  /// Действие при выборе определенной даты.
+  final void Function(CalendarTapDetails calendarTapDetails)? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final DateTime today = DateTime.now();
-
     /// Количество дней в месяце.
     ///
     /// Требутеся для установления параметра [maxDate], чтобы исключить
     /// возможность переключения месяца внутри одного виджета при
     /// выборе даты стрелками на клавиатуре.
-    final int dayInMonth = DateTime(today.year, index + 2, 0).day;
+    final int dayInMonth = DateUtils.getDaysInMonth(currentDate.year, month);
 
     return SfCalendar(
+      controller: controller,
       view: CalendarView.month,
       allowViewNavigation: false,
       firstDayOfWeek: 1,
-      initialDisplayDate: DateTime(today.year, index + 1, today.day),
-      // initialSelectedDate: ,
+      initialDisplayDate: DateTime(currentDate.year, month, currentDate.day),
       showNavigationArrow: false,
       showDatePickerButton: false,
       viewNavigationMode: ViewNavigationMode.none,
-      minDate: DateTime(today.year, index + 1, 1),
-      maxDate: DateTime(today.year, index + 1, dayInMonth),
-      // onSelectionChanged: ,
+      minDate: DateTime(currentDate.year, month),
+      maxDate: DateTime(currentDate.year, month, dayInMonth),
+      onTap: onTap,
       dataSource: MeetingDataSource(_getDataSource()),
       monthViewSettings: const MonthViewSettings(
         appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
-        // navigationDirection:
         showTrailingAndLeadingDates: false,
       ),
     );
